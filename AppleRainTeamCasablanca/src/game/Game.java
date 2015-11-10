@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Game implements Runnable {
     private Display display;
@@ -19,7 +18,8 @@ public class Game implements Runnable {
     private Integer lives;
     private Integer score;
     ArrayList<Apple> applist;
-    private int appCount = 5;
+    private int inAppCount = 5;
+    private int appCount = inAppCount;
     private boolean running = false;
     private Thread thread;
 
@@ -59,7 +59,7 @@ public class Game implements Runnable {
         sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
 
         applist = new ArrayList<Apple>();
-        for (int i = 0; i < appCount; i++) {
+        for (int i = 0; i < inAppCount; i++) {
             applist.add(apple.createRand());
         }
 
@@ -77,10 +77,8 @@ public class Game implements Runnable {
         player = new Player();
         apple = new Apple(4, 5, 2);
         basket = new Basket();
-        lives=5;
-
+        lives = 5;
     }
-
 
     //The method that will update all the variables
     private void tick() {
@@ -91,24 +89,27 @@ public class Game implements Runnable {
         basket.tick();
         //apple.tick();
 
-
-        for (int i = 0; i < appCount; i++) {
+        for (int i = 0; i < inAppCount; i++) {
             if (applist.get(i).getY() > 600) {
                 lives--;
                 applist.remove(i);
                 applist.add(i, Apple.createRand());
             }
             // Checking catching
-            if(applist.get(i).Intersects(basket.getBoundingBox())){
+            if (applist.get(i).Intersects(basket.getBoundingBox())) {
                 score++;
                 applist.remove(i);
                 applist.add(i, Apple.createRand());
             }
 
-
             //tick
             applist.get(i).tick();
 
+        }
+
+        if (appCount > inAppCount) {
+            applist.add(Apple.createRand());
+            inAppCount = appCount;
         }
 
 
@@ -140,16 +141,13 @@ public class Game implements Runnable {
 
         g.drawImage(img, 0, 0, this.width, this.height, null);
         g.setColor(Color.BLUE);
-        g.drawString("SCORE: "+score.toString(),100,100);
-        g.drawString("LIVES: "+lives.toString(),100,50);
+        g.drawString("SCORE: " + score.toString(), 100, 100);
+        g.drawString("LIVES: " + lives.toString(), 100, 50);
         basket.render(g);
         apple.render(g);
         for (Apple a : applist) {
             a.render(g);
         }
-        g.setColor(Color.red);
-//        g.fillRect(this.enemy.x, this.enemy.y, this.enemy.width, this.enemy.height);
-
         //Checks if a State exists and render()
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.g);
