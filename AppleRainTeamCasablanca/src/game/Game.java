@@ -9,12 +9,16 @@ import states.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class Game implements Runnable{
+public class Game implements Runnable {
     private Display display;
     public int width, height;
     public String title;
-
+    private int score;
+    ArrayList<Apple> applist;
+    private int appCount = 5;
     private boolean running = false;
     private Thread thread;
 
@@ -30,7 +34,7 @@ public class Game implements Runnable{
     private State menuState;
     private State settingsState;
 
-    private AppleFactory factory;
+    //private AppleFactory factory;
 
     //Player
     public static Player player;
@@ -41,17 +45,22 @@ public class Game implements Runnable{
         this.width = width;
         this.height = height;
         this.title = title;
+        this.score = 0;
     }
 
     //Initializes all the graphics and it will get
     //everything ready for our game
     private void init() {
+
         //Initializing a new display.Display object
         display = new Display(this.title, this.width, this.height);
         img = ImageLoader.loadImage("/textures/Background.jpg");
         sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
-        factory = new AppleFactory();
 
+        applist = new ArrayList<Apple>();
+        for (int i = 0; i < appCount; i++) {
+            applist.add(apple.createRand());
+        }
 
         this.inputHandler = new InputHandler(this.display);
         Assets.init();
@@ -65,7 +74,7 @@ public class Game implements Runnable{
         StateManager.setState(gameState);
 
         player = new Player();
-        apple = new Apple(4,5);
+        apple = new Apple(4, 5,2);
         basket = new Basket();
 
     }
@@ -79,7 +88,23 @@ public class Game implements Runnable{
         }
         basket.tick();
         apple.tick();
-        if(basket.Intersects(apple.boundingBox())) {
+
+
+        for (int i = 0; i < appCount; i++) {
+
+            if (applist.get(i).getY() > 600) {
+               applist.remove(i);
+                applist.add(i, Apple.createRand());
+            }
+            ;
+        }
+
+        for (Apple a : applist) {
+            a.tick();
+        }
+
+
+        if (basket.Intersects(apple.boundingBox())) {
             System.out.print("You died");
             stop();
         }
@@ -109,11 +134,14 @@ public class Game implements Runnable{
 
         basket.render(g);
         apple.render(g);
+        for (Apple a : applist) {
+            a.render(g);
+        }
         g.setColor(Color.red);
 //        g.fillRect(this.enemy.x, this.enemy.y, this.enemy.width, this.enemy.height);
 
         //Checks if a State exists and render()
-        if (StateManager.getState() != null){
+        if (StateManager.getState() != null) {
             StateManager.getState().render(this.g);
         }
 
@@ -129,7 +157,7 @@ public class Game implements Runnable{
     @Override
     public void run() {
         init();
-        factory.run();
+        // factory.run();
         //Sets the frames per seconds
         int fps = 30;
         //1 000 000 000 nanoseconds in a second. Thus we measure time in nanoseconds
@@ -148,7 +176,7 @@ public class Game implements Runnable{
             //Sets the now variable to the current time in nanoseconds
             now = System.nanoTime();
             //Amount of time passed divided by the max amount of time allowed.
-            delta += (now-lastTime) / timePerTick;
+            delta += (now - lastTime) / timePerTick;
             //Adding to the timer the time passed
             timer += now - lastTime;
             //Setting the lastTime with the values of now time after we have calculated the delta
@@ -181,7 +209,7 @@ public class Game implements Runnable{
         //If the game is running exit the method
         //This is done in order to prevent the game to initialize
         //more than enough threads
-        if(running) {
+        if (running) {
             return;
         }
         //Setting the while-game-loop to run
@@ -198,7 +226,7 @@ public class Game implements Runnable{
         //If the game is not running exit the method
         //This is done to prevent the game from stopping a
         //non-existing thread and cause errors
-        if(!running) {
+        if (!running) {
             return;
         }
         running = false;
