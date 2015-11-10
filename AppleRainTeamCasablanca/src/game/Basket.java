@@ -17,13 +17,18 @@ public class Basket {
     public static boolean goingLeft;
     public static boolean goingRight;
 
+    public Rectangle getBoundingBox() {
+        return boundingBox;
+    }
+
     public Basket() {
         this.x = 325;
         this.y = 495;
         this.width = 150;
         this.height = 103;
         this.health = 50;
-        this.velocity = 4;
+        this.velocity = 15;
+
         this.boundingBox = new Rectangle(this.width, this.height);
 
 //        goingUp = false;

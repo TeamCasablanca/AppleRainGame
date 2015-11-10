@@ -16,7 +16,8 @@ public class Game implements Runnable {
     private Display display;
     public int width, height;
     public String title;
-    private int score;
+    private Integer lives;
+    private Integer score;
     ArrayList<Apple> applist;
     private int appCount = 5;
     private boolean running = false;
@@ -74,8 +75,9 @@ public class Game implements Runnable {
         StateManager.setState(gameState);
 
         player = new Player();
-        apple = new Apple(4, 5,2);
+        apple = new Apple(4, 5, 2);
         basket = new Basket();
+        lives=5;
 
     }
 
@@ -87,20 +89,26 @@ public class Game implements Runnable {
             StateManager.getState().tick();
         }
         basket.tick();
-        apple.tick();
+        //apple.tick();
 
 
         for (int i = 0; i < appCount; i++) {
-
             if (applist.get(i).getY() > 600) {
-               applist.remove(i);
+                lives--;
+                applist.remove(i);
                 applist.add(i, Apple.createRand());
             }
-            ;
-        }
+            // Checking catching
+            if(applist.get(i).Intersects(basket.getBoundingBox())){
+                score++;
+                applist.remove(i);
+                applist.add(i, Apple.createRand());
+            }
 
-        for (Apple a : applist) {
-            a.tick();
+
+            //tick
+            applist.get(i).tick();
+
         }
 
 
@@ -131,7 +139,9 @@ public class Game implements Runnable {
         //Beginning of drawing things on the screen
 
         g.drawImage(img, 0, 0, this.width, this.height, null);
-
+        g.setColor(Color.BLUE);
+        g.drawString("SCORE: "+score.toString(),100,100);
+        g.drawString("LIVES: "+lives.toString(),100,50);
         basket.render(g);
         apple.render(g);
         for (Apple a : applist) {
@@ -174,28 +184,35 @@ public class Game implements Runnable {
 
         while (running) {
             //Sets the now variable to the current time in nanoseconds
-            now = System.nanoTime();
-            //Amount of time passed divided by the max amount of time allowed.
-            delta += (now - lastTime) / timePerTick;
-            //Adding to the timer the time passed
-            timer += now - lastTime;
-            //Setting the lastTime with the values of now time after we have calculated the delta
-            lastTime = now;
+//            now = System.nanoTime();
+//            //Amount of time passed divided by the max amount of time allowed.
+//            delta += (now - lastTime) / timePerTick;
+//            //Adding to the timer the time passed
+//            timer += now - lastTime;
+//            //Setting the lastTime with the values of now time after we have calculated the delta
+//            lastTime = now;
+
 
             //If enough time has passed we need to tick() and render() to achieve 60 fps
-            if (delta >= 1) {
-                tick();
-                render();
-                //Reset the delta
-                ticks++;
-                delta--;
+//            if (delta >= 1) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-            if (timer >= 1_000_000_000) {
-                System.out.println("Ticks and Frames: " + ticks);
-                ticks = 0;
-                timer = 0;
-            }
+            tick();
+            render();
+//                //Reset the delta
+//                ticks++;
+//                delta--;
+//            }
+//
+//            if (timer >= 1_000_000_000) {
+//                System.out.println("Ticks and Frames: " + ticks);
+//                ticks = 0;
+//                timer = 0;
+//            }
         }
 
         //Calls the stop method to ensure everything has been stopped
