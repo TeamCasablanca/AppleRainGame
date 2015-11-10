@@ -15,12 +15,21 @@ public class InputHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-//        if (keyCode == KeyEvent.VK_UP) {
-//            Game.basket.goingUp = true;
-//        }
-//        if (keyCode == KeyEvent.VK_DOWN) {
-//            Game.basket.goingDown = true;
-//        }
+        if ((keyCode == KeyEvent.VK_UP)) {
+            if (Game.basket.goingLeft) {
+                Game.basket.isJumpingL = true;
+            } else if (Game.basket.goingRight) {
+                Game.basket.isJumpingR = true;
+            } else
+                Game.basket.isJumping = true;
+        }
+        if (keyCode == KeyEvent.VK_DOWN) {
+            if (Game.basket.goingLeft) {
+                Game.basket.isSlideLeft = true;
+            } else if (Game.basket.goingRight) {
+                Game.basket.isSlideRight = true;
+            }
+        }
         if (keyCode == KeyEvent.VK_LEFT) {
             Game.basket.goingLeft = true;
         }
@@ -31,6 +40,7 @@ public class InputHandler implements KeyListener {
             System.exit(0);
         }
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
