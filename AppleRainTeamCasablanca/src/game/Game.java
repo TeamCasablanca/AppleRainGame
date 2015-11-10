@@ -45,8 +45,8 @@ public class Game implements Runnable{
     private void init() {
         //Initializing a new display.Display object
         display = new Display(this.title, this.width, this.height);
-        img = ImageLoader.loadImage("/textures/bckg.jpg");
-        sh = new SpriteSheet(ImageLoader.loadImage("/textures/player.png"));
+        img = ImageLoader.loadImage("/textures/Background.jpg");
+        sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
 
 
         this.inputHandler = new InputHandler(this.display);
