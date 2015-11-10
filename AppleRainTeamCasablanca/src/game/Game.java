@@ -12,35 +12,28 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Game implements Runnable {
-    private Display display;
+    public static Basket basket;
     public int width, height;
     public String title;
+    private Display display;
     private Integer lives;
     private Integer score;
-    ArrayList<Apple> applist;
+    private ArrayList<Apple> appleList;
     private int inAppCount = 5;
     private int appCount = inAppCount;
     private boolean running = false;
     private Thread thread;
-
     private InputHandler inputHandler;
     private BufferStrategy bs;
     private Graphics g;
-
     private BufferedImage img;
     private SpriteSheet sh;
-
     //States
     private State gameState;
     private State menuState;
-    private State settingsState;
-
-    //private AppleFactory factory;
 
     //Player
-    public static Player player;
-    public static Apple apple;
-    public static Basket basket;
+    private State settingsState;
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -58,9 +51,9 @@ public class Game implements Runnable {
         img = ImageLoader.loadImage("/textures/Background.jpg");
         sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
 
-        applist = new ArrayList<Apple>();
+        appleList = new ArrayList<>();
         for (int i = 0; i < inAppCount; i++) {
-            applist.add(apple.createRand());
+            appleList.add(Apple.createRand());
         }
 
         this.inputHandler = new InputHandler(this.display);
@@ -74,8 +67,6 @@ public class Game implements Runnable {
         //any more states set up
         StateManager.setState(gameState);
 
-        player = new Player();
-        apple = new Apple(4, 5, 2);
         basket = new Basket();
         lives = 5;
     }
@@ -87,36 +78,35 @@ public class Game implements Runnable {
             StateManager.getState().tick();
         }
         basket.tick();
-        //apple.tick();
 
         for (int i = 0; i < inAppCount; i++) {
-            if (applist.get(i).getY() > 600) {
+            if (appleList.get(i).getY() > 600) {
                 lives--;
-                applist.remove(i);
-                applist.add(i, Apple.createRand());
+                appleList.remove(i);
+                appleList.add(i, Apple.createRand());
             }
             // Checking catching
-            if (applist.get(i).Intersects(basket.getBoundingBox())) {
+            if (appleList.get(i).Intersects(basket.getBoundingBox())) {
                 score++;
-                applist.remove(i);
-                applist.add(i, Apple.createRand());
+                appleList.remove(i);
+                appleList.add(i, Apple.createRand());
             }
 
             //tick
-            applist.get(i).tick();
+            appleList.get(i).tick();
 
         }
 
         if (appCount > inAppCount) {
-            applist.add(Apple.createRand());
+            appleList.add(Apple.createRand());
             inAppCount = appCount;
         }
 
 
-        if (basket.Intersects(apple.boundingBox())) {
-            System.out.print("You died");
-            stop();
-        }
+//        if (basket.Intersects(apple.boundingBox())) {
+//            System.out.print("You died");
+//            stop();
+//        }
 
     }
 
@@ -144,8 +134,7 @@ public class Game implements Runnable {
         g.drawString("SCORE: " + score.toString(), 100, 100);
         g.drawString("LIVES: " + lives.toString(), 100, 50);
         basket.render(g);
-        apple.render(g);
-        for (Apple a : applist) {
+        for (Apple a : appleList) {
             a.render(g);
         }
         //Checks if a State exists and render()
@@ -165,20 +154,19 @@ public class Game implements Runnable {
     @Override
     public void run() {
         init();
-        // factory.run();
-        //Sets the frames per seconds
-        int fps = 30;
-        //1 000 000 000 nanoseconds in a second. Thus we measure time in nanoseconds
-        //to be more specific. Maximum allowed time to run the tick() and render() methods
-        double timePerTick = 1_000_000_000.0 / fps;
-        //How much time we have until we need to call our tick() and render() methods
-        double delta = 0;
-        //The current time in nanoseconds
-        long now;
-        //Returns the amount of time in nanoseconds that our computer runs.
-        long lastTime = System.nanoTime();
-        long timer = 0;
-        int ticks = 0;
+//        //Sets the frames per seconds
+//        int fps = 30;
+//        //1 000 000 000 nanoseconds in a second. Thus we measure time in nanoseconds
+//        //to be more specific. Maximum allowed time to run the tick() and render() methods
+//        double timePerTick = 1_000_000_000.0 / fps;
+//        //How much time we have until we need to call our tick() and render() methods
+//        double delta = 0;
+//        //The current time in nanoseconds
+//        long now;
+//        //Returns the amount of time in nanoseconds that our computer runs.
+//        long lastTime = System.nanoTime();
+//        long timer = 0;
+//        int ticks = 0;
 
         while (running) {
             //Sets the now variable to the current time in nanoseconds
@@ -194,7 +182,7 @@ public class Game implements Runnable {
             //If enough time has passed we need to tick() and render() to achieve 60 fps
 //            if (delta >= 1) {
             try {
-                Thread.sleep(50);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
