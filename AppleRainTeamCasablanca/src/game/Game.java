@@ -30,9 +30,12 @@ public class Game implements Runnable{
     private State menuState;
     private State settingsState;
 
+    private AppleFactory factory;
+
     //Player
     public static Player player;
-    public static Rectangle enemy;
+    public static Apple apple;
+    public static Basket basket;
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -47,6 +50,7 @@ public class Game implements Runnable{
         display = new Display(this.title, this.width, this.height);
         img = ImageLoader.loadImage("/textures/Background.jpg");
         sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
+        factory = new AppleFactory();
 
 
         this.inputHandler = new InputHandler(this.display);
@@ -61,7 +65,9 @@ public class Game implements Runnable{
         StateManager.setState(gameState);
 
         player = new Player();
-        enemy = new Rectangle(50, 50, 20, 20);
+        apple = new Apple(4,5);
+        basket = new Basket();
+
     }
 
 
@@ -71,8 +77,9 @@ public class Game implements Runnable{
         if (StateManager.getState() != null) {
             StateManager.getState().tick();
         }
-        player.tick();
-        if(player.Intersects(enemy)) {
+        basket.tick();
+        apple.tick();
+        if(basket.Intersects(apple.boundingBox())) {
             System.out.print("You died");
             stop();
         }
@@ -100,9 +107,10 @@ public class Game implements Runnable{
 
         g.drawImage(img, 0, 0, this.width, this.height, null);
 
-        player.render(g);
+        basket.render(g);
+        apple.render(g);
         g.setColor(Color.red);
-        g.fillRect(this.enemy.x, this.enemy.y, this.enemy.width, this.enemy.height);
+//        g.fillRect(this.enemy.x, this.enemy.y, this.enemy.width, this.enemy.height);
 
         //Checks if a State exists and render()
         if (StateManager.getState() != null){
@@ -121,7 +129,7 @@ public class Game implements Runnable{
     @Override
     public void run() {
         init();
-
+        factory.run();
         //Sets the frames per seconds
         int fps = 30;
         //1 000 000 000 nanoseconds in a second. Thus we measure time in nanoseconds

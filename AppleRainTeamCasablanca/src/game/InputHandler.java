@@ -15,17 +15,17 @@ public class InputHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        if (keyCode == KeyEvent.VK_UP) {
-            Game.player.goingUp = true;
-        }
-        if (keyCode == KeyEvent.VK_DOWN) {
-            Game.player.goingDown = true;
-        }
+//        if (keyCode == KeyEvent.VK_UP) {
+//            Game.basket.goingUp = true;
+//        }
+//        if (keyCode == KeyEvent.VK_DOWN) {
+//            Game.basket.goingDown = true;
+//        }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.player.goingLeft = true;
+            Game.basket.goingLeft = true;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.player.goingRight = true;
+            Game.basket.goingRight = true;
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(0);
@@ -43,16 +43,16 @@ public class InputHandler implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_UP) {
-            Game.player.goingUp = false;
+            Game.basket.goingUp = false;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
-            Game.player.goingDown = false;
+            Game.basket.goingDown = false;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.player.goingLeft = false;
+            Game.basket.goingLeft = false;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.player.goingRight = false;
+            Game.basket.goingRight = false;
         }
     }
 }

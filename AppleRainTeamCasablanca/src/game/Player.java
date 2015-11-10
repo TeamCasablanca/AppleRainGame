@@ -65,6 +65,6 @@ public class Player {
 
     //Draws the player
     public void render(Graphics g) {
-        g.drawImage(Assets.player1, this.x, this.y, null);
+        g.drawImage(Assets.basket, this.x, this.y, null);
     }
 }
