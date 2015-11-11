@@ -135,19 +135,28 @@ public class Game implements Runnable {
         //Beginning of drawing things on the screen
 
         g.drawImage(img, 0, 0, this.width, this.height, null);
-        g.setColor(Color.BLUE);
-        g.drawString("SCORE: " + score.toString(), 100, 100);
-        g.drawString("LIVES: " + lives.toString(), 100, 50);
         basket.render(g);
         for (Apple a : appleList) {
             a.render(g);
         }
+
+        g.setColor(new Color(180, 180, 180, 150));
+        g.fill3DRect(5, 562, 790, 35, true);
+        g.setColor(Color.GRAY);
+        g.setFont(new Font("Verdana",Font.PLAIN,20));
+        g.drawString("SCORE: " + score.toString(), 12, 590);
+        g.drawString("LIVES: " + lives.toString(), 680, 590);
+
+
         //Checks if a State exists and render()
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.g);
         }
         if (lives < 1) {
-            // g.setFont(new Font("Verdana",Font.BOLD,50));
+            g.setFont(new Font("Verdana",Font.BOLD,40));
+            g.setColor(new Color(180, 180, 180, 150));
+            g.fill3DRect(100, 100, 600, 200, true);
+            g.setColor(new Color(171, 44, 44));
             g.drawString("YOU ARE FIRED!!!", 200, 200);
             System.out.print("You died");
 

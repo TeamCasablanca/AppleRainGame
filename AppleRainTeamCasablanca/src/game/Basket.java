@@ -33,7 +33,7 @@ public class Basket {
 
     public Basket() {
         this.x = 325;
-        this.y = 495;
+        this.y = 492;
         this.width = 150;
         this.height = 103;
         this.health = 50;
