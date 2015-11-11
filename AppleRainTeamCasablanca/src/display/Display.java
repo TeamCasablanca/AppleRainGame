@@ -7,12 +7,12 @@ public class Display extends Canvas {
     private final static int VIBRATION_LENGTH = 20;
     private final static int VIBRATION_VELOCITY = 5;
     //Creating our Window frame
-    private JFrame frame;
+    private  static JFrame frame;
     //Creating a field on which we draw
     private Canvas canvas;
 
     private String title;
-    private int width, height;
+    public static int width, height;
 
     public Display(String title, int width, int height) {
         this.title = title;
@@ -60,11 +60,11 @@ public class Display extends Canvas {
         return this.canvas;
     }
 
-    public Point getPos() {
+    public static Point getPos() {
         return frame.getLocationOnScreen();
     }
 
-    public void shake() {
+    public static void shake() {
         Point now = getPos();
         try {
             for (int i = 0; i < VIBRATION_LENGTH; i++) {

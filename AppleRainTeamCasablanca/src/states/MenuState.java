@@ -2,7 +2,8 @@ package states;
 
 import java.awt.*;
 
-public class MenuState extends State{
+public class MenuState extends State {
+    public static Button start = new Button("start");
 
     public MenuState() {
 
@@ -15,6 +16,7 @@ public class MenuState extends State{
 
     @Override
     public void render(Graphics g) {
+
 
     }
 }

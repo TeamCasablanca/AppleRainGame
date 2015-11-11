@@ -1,5 +1,6 @@
 package game;
 
+import display.Display;
 import gfx.Assets;
 
 import java.awt.*;
@@ -153,11 +154,13 @@ public class Basket {
     }
 
     public void mvR() {
-        this.x += this.velocity;
+        if (this.x < Display.width - this.width)
+            this.x += this.velocity;
     }
 
     public void mvL() {
-        this.x -= this.velocity;
+        if (this.x > 1)
+            this.x -= this.velocity;
     }
 
     public void mvUp() {

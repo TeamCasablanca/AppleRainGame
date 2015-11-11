@@ -12,15 +12,15 @@ import java.util.ArrayList;
 
 public class GameState extends State {
 
-    public static Basket basket=new Basket();
-    private Integer lives=5;
+    public static Basket basket = new Basket();
+    private Integer lives = 5;
     public static ArrayList<Apple> appleList;
-    private Integer score=0;
+    private Integer score = 0;
+    private int newscore=score;
     public static int inAppCount = 5;
     private int appCount = inAppCount;
 
     public GameState() {
-
     }
 
     @Override
@@ -29,20 +29,31 @@ public class GameState extends State {
         basket.tick();
 
         for (int i = 0; i < inAppCount; i++) {
-            if (appleList.get(i).getY() > 600) {
+            if (appleList.get(i).getY() > Display.height) {
                 lives--;
-                //  Display. display.shake();
+                if(lives==0){
+                    Game.end();
+                }
+                Display.shake();
                 appleList.remove(i);
                 appleList.add(i, Apple.createRand());
             }
             // Checking catching
             if (appleList.get(i).Intersects(basket.getBoundingBox())) {
                 score++;
+                if(score-newscore>10){
+                    newscore=score;
+                    lives++;
+                    appCount++;
+                }
                 appleList.remove(i);
                 appleList.add(i, Apple.createRand());
             }
             //tick
             appleList.get(i).tick();
+        }
+        if (score > 10) {
+
         }
         if (appCount > inAppCount) {
             appleList.add(Apple.createRand());
@@ -66,12 +77,12 @@ public class GameState extends State {
         g.setColor(new Color(180, 180, 180, 150));
         g.fill3DRect(5, 562, 790, 35, true);
         g.setColor(Color.GRAY);
-        g.setFont(new Font("Verdana",Font.PLAIN,20));
+        g.setFont(new Font("Verdana", Font.PLAIN, 20));
         g.drawString("SCORE: " + score.toString(), 12, 590);
         g.drawString("LIVES: " + lives.toString(), 680, 590);
 
         if (lives < 1) {
-            g.setFont(new Font("Verdana",Font.BOLD,40));
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
             g.setColor(new Color(180, 180, 180, 150));
             g.fill3DRect(100, 100, 600, 200, true);
             g.setColor(new Color(171, 44, 44));
