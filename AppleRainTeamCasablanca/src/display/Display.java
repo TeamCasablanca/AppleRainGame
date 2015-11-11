@@ -3,7 +3,9 @@ package display;
 import javax.swing.*;
 import java.awt.*;
 
-public class Display extends Canvas{
+public class Display extends Canvas {
+    private final static int VIBRATION_LENGTH = 20;
+    private final static int VIBRATION_VELOCITY = 5;
     //Creating our Window frame
     private JFrame frame;
     //Creating a field on which we draw
@@ -44,7 +46,7 @@ public class Display extends Canvas{
         //Making sure the Canvas will stay with the given width and height
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
-        canvas.setFont(new Font("Verdana",Font.BOLD,30));
+        canvas.setFont(new Font("Verdana", Font.BOLD, 30));
 
 
         //Linking the canvas onto the frame
@@ -56,5 +58,27 @@ public class Display extends Canvas{
     //Creating a getter to access the Canvas object from other classes
     public Canvas getCanvas() {
         return this.canvas;
+    }
+
+    public Point getPos() {
+        return frame.getLocationOnScreen();
+    }
+
+    public void shake() {
+        Point now = getPos();
+        try {
+            for (int i = 0; i < VIBRATION_LENGTH; i++) {
+                Thread.sleep(5);
+                frame.setLocation(now.x, now.y + VIBRATION_VELOCITY);
+                Thread.sleep(5);
+                frame.setLocation(now.x, now.y - VIBRATION_VELOCITY);
+                Thread.sleep(5);
+                frame.setLocation(now.x + VIBRATION_VELOCITY, now.y);
+                Thread.sleep(5);
+                frame.setLocation(now.x, now.y);
+            }
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
     }
 }

@@ -22,6 +22,7 @@ public class Game implements Runnable {
     private int inAppCount = 5;
     private int appCount = inAppCount;
     private boolean running = false;
+    private int sleepTime = 50;
     private Thread thread;
     private InputHandler inputHandler;
     private BufferStrategy bs;
@@ -68,7 +69,7 @@ public class Game implements Runnable {
         StateManager.setState(gameState);
 
         basket = new Basket();
-        lives = 5;
+        lives = 1;
     }
 
     //The method that will update all the variables
@@ -82,6 +83,7 @@ public class Game implements Runnable {
         for (int i = 0; i < inAppCount; i++) {
             if (appleList.get(i).getY() > 600) {
                 lives--;
+                display.shake();
                 appleList.remove(i);
                 appleList.add(i, Apple.createRand());
             }
@@ -103,11 +105,14 @@ public class Game implements Runnable {
         }
 
 
-//        if (basket.Intersects(apple.boundingBox())) {
-//            System.out.print("You died");
-//            stop();
-//        }
+        if (lives < 1) {
+            end();
+        }
 
+    }
+
+    private void end() {
+        running = false;
     }
 
     //The method that will draw everything on the canvas
@@ -141,7 +146,18 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.g);
         }
+        if (lives < 1) {
+            // g.setFont(new Font("Verdana",Font.BOLD,50));
+            g.drawString("YOU ARE FIRED!!!", 200, 200);
+            System.out.print("You died");
 
+            Button restart = new Button("qq");
+            restart.setLocation(20, 20);
+            restart.setVisible(true);
+        restart.setEnabled(true);
+            restart.setForeground(Color.PINK);
+
+        }
         //End of drawing objects
 
         //Enables the buffer
@@ -182,7 +198,7 @@ public class Game implements Runnable {
             //If enough time has passed we need to tick() and render() to achieve 60 fps
 //            if (delta >= 1) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
