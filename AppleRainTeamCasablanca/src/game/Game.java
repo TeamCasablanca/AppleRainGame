@@ -18,20 +18,15 @@ public class Game implements Runnable {
 
     private Display display;
 
-
     static boolean running = false;
     private int sleepTime = 50;
-
     private Thread thread;
     private InputHandler inputHandler;
     private BufferStrategy bs;
     private Graphics g;
     public static BufferedImage img;
-    private SpriteSheet sh;
-    //States
+    //States only one :(
     private State gameState;
-    //Player
-    private State settingsState;
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -46,8 +41,6 @@ public class Game implements Runnable {
         //Initializing a new display.Display object
         display = new Display(this.title, this.width, this.height);
         img = ImageLoader.loadImage("/textures/Background.jpg");
-        sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
-
         GameState.appleList = new ArrayList<>();
         for (int i = 0; i < GameState.inAppCount; i++) {
             GameState.appleList.add(Apple.createRand());
@@ -62,7 +55,6 @@ public class Game implements Runnable {
         //any more states set up
         StateManager.setState(gameState);
 
-        // lives = 1;
     }
 
     //The method that will update all the variables
@@ -101,13 +93,13 @@ public class Game implements Runnable {
             StateManager.getState().render(this.g);
         }
 
-    //End of drawing objects
+        //End of drawing objects
 
-    //Enables the buffer
-    bs.show();
-    //Shows everything stored in the Graphics object
-    g.dispose();
-}
+        //Enables the buffer
+        bs.show();
+        //Shows everything stored in the Graphics object
+        g.dispose();
+    }
 
     //Implementing the interface's method
     @Override

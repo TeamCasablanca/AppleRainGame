@@ -29,20 +29,20 @@ public class Apple {
         }
         return false;
     }
-    //Update the movement of the player
+    //Update the movement of apple
     public void tick() {
         //Update the bounding box's position
         this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
         this.y += this.velocity;
     }
-    //Draws the player
+    //Draws apple
     public void render(Graphics g) {
         g.drawImage(Assets.apple, this.x, this.y, null);
     }
 
     public static Apple createRand() {
 
-        int x = ran.nextInt(795) + 5;
+        int x = ran.nextInt(760) + 5;
         int y = ran.nextInt(10) + 5;
         int vel=ran.nextInt(7)+2;
         Apple apple = new Apple(x, y,vel);

@@ -6,6 +6,7 @@ import gfx.Assets;
 import java.awt.*;
 
 public class Basket {
+    private final int STARTY=495;
     private int x, y;
     private int velocity;
     private int width, height;
@@ -33,7 +34,7 @@ public class Basket {
 
     public Basket() {
         this.x = 325;
-        this.y = 495;
+        this.y = STARTY;
         this.width = 150;
         this.height = 103;
         this.velocity = 15;
@@ -58,7 +59,7 @@ public class Basket {
                 mvDn();
                 mvL();
             }
-            if (this.y > 495) {
+            if (this.y > STARTY) {
                 upp = true;
                 isJumpingL = false;
             }
@@ -76,7 +77,7 @@ public class Basket {
                 mvDn();
                 mvR();
             }
-            if (this.y > 495) {
+            if (this.y > STARTY) {
                 upp = true;
                 isJumpingR = false;
             }
@@ -92,7 +93,7 @@ public class Basket {
             } else {
                 mvDn();
             }
-            if (this.y > 495) {
+            if (this.y > STARTY) {
                 upp = true;
                 isJumping = false;
             }
@@ -139,9 +140,7 @@ public class Basket {
     }
 
     public void mvDn() {
-        if (this.y > 495) {
-            this.y = 495;
-        } else
+
             this.y += this.velocity;
     }
 

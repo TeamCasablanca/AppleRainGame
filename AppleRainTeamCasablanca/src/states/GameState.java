@@ -1,11 +1,9 @@
 package states;
 
-
 import display.Display;
 import game.Apple;
 import game.Basket;
 import game.Game;
-import gfx.Assets;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ public class GameState extends State {
     private Integer lives = 5;
     public static ArrayList<Apple> appleList;
     private Integer score = 0;
-    private int newscore=score;
+    private int newScore = score;
     public static int inAppCount = 5;
     private int appCount = inAppCount;
 
@@ -31,18 +29,17 @@ public class GameState extends State {
         for (int i = 0; i < inAppCount; i++) {
             if (appleList.get(i).getY() > Display.height) {
                 lives--;
-                if(lives==0){
+                if (lives == 0) {
                     Game.end();
                 }
-                Display.shake();
                 appleList.remove(i);
                 appleList.add(i, Apple.createRand());
             }
             // Checking catching
             if (appleList.get(i).Intersects(basket.getBoundingBox())) {
                 score++;
-                if(score-newscore>10){
-                    newscore=score;
+                if (score - newScore > 5) {
+                    newScore = score;
                     lives++;
                     appCount++;
                 }
@@ -52,28 +49,21 @@ public class GameState extends State {
             //tick
             appleList.get(i).tick();
         }
-        if (score > 10) {
 
-        }
         if (appCount > inAppCount) {
+            Display.shake();
             appleList.add(Apple.createRand());
             inAppCount = appCount;
-        }
-
-        if (lives < 1) {
-            Game.end();
         }
     }
 
     @Override
     public void render(Graphics g) {
         g.drawImage(Game.img, 0, 0, 800, 600, null);
-
         basket.render(g);
         for (Apple a : appleList) {
             a.render(g);
         }
-
         g.setColor(new Color(180, 180, 180, 150));
         g.fill3DRect(5, 562, 790, 35, true);
         g.setColor(Color.GRAY);
@@ -87,7 +77,14 @@ public class GameState extends State {
             g.fill3DRect(100, 100, 600, 200, true);
             g.setColor(new Color(171, 44, 44));
             g.drawString("YOU ARE FIRED!!!", 200, 200);
-            System.out.print("You died");
+        }
+        if (score > 100) {
+            Game.end();
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.setColor(new Color(180, 180, 180, 150));
+            g.fill3DRect(100, 100, 600, 200, true);
+            g.setColor(new Color(5, 171, 4));
+            g.drawString("YOU ARE HIRED!!!", 200, 200);
         }
     }
 }
