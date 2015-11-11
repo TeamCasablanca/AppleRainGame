@@ -39,8 +39,7 @@ public class InputHandler implements KeyListener {
             GameState.basket.goingRight = true;
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
-            StateManager.setState(Game.menuState);
-           // System.exit(0);
+            System.exit(0);
         }
     }
 

@@ -10,7 +10,6 @@ public class Display extends Canvas {
     private  static JFrame frame;
     //Creating a field on which we draw
     private Canvas canvas;
-
     private String title;
     public static int width, height;
 
@@ -18,7 +17,6 @@ public class Display extends Canvas {
         this.title = title;
         this.width = width;
         this.height = height;
-
         //Creating the JFrame
         createDisplay();
     }
@@ -63,7 +61,6 @@ public class Display extends Canvas {
     public static Point getPos() {
         return frame.getLocationOnScreen();
     }
-
     public static void shake() {
         Point now = getPos();
         try {

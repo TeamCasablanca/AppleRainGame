@@ -9,7 +9,6 @@ public class Basket {
     private int x, y;
     private int velocity;
     private int width, height;
-    private int health;
     public static boolean isJumpingR = false;
     public static boolean isJumpingL = false;
     public static boolean isJumping = false;
@@ -17,7 +16,7 @@ public class Basket {
     public static boolean isSlideRight = false;
 
     private int jumpHigh = 350;
-    private int slideSpeedMult = 5;
+    private int slideSpeedMult = 7;
 
     private boolean upp = true;
 
@@ -37,27 +36,13 @@ public class Basket {
         this.y = 495;
         this.width = 150;
         this.height = 103;
-        this.health = 50;
         this.velocity = 15;
 
         this.boundingBox = new Rectangle(this.width, this.height);
 
-//        goingUp = false;
-//        goingDown = false;
+
         goingLeft = false;
         goingRight = false;
-    }
-
-    public int getHealth() {
-        return this.health;
-    }
-
-    //Checks if the player intersects with something
-    public boolean Intersects(Rectangle r) {
-        if (this.boundingBox.contains(r) || r.contains(this.boundingBox)) {
-            return true;
-        }
-        return false;
     }
 
     //Update the movement of the player
@@ -123,21 +108,10 @@ public class Basket {
             isSlideRight = false;
         }
 
-//        if(goingUp) {
-//            this.y -= this.velocity;
-//        }
-//        if(goingDown) {
-//            this.y += this.velocity;
-//        }
-        if (goingLeft)
-
-        {
+        if (goingLeft) {
             mvL();
         }
-
-        if (goingRight)
-
-        {
+        if (goingRight) {
             mvR();
         }
         boundBoxUpdate();
@@ -149,9 +123,6 @@ public class Basket {
         g.drawImage(Assets.basket, this.x, this.y, null);
     }
 
-    public void jump() {
-
-    }
 
     public void mvR() {
         if (this.x < Display.width - this.width)
@@ -168,7 +139,10 @@ public class Basket {
     }
 
     public void mvDn() {
-        this.y += this.velocity;
+        if (this.y > 495) {
+            this.y = 495;
+        } else
+            this.y += this.velocity;
     }
 
     public void boundBoxUpdate() {
