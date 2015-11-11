@@ -33,7 +33,7 @@ public class Basket {
 
     public Basket() {
         this.x = 325;
-        this.y = 492;
+        this.y = 495;
         this.width = 150;
         this.height = 103;
         this.health = 50;
@@ -62,7 +62,6 @@ public class Basket {
     //Update the movement of the player
     public void tick() {
         if (isJumpingL) {
-
             if (upp) {
                 mvUp();
                 mvL();
@@ -73,7 +72,7 @@ public class Basket {
                 mvDn();
                 mvL();
             }
-            if (this.y == 495) {
+            if (this.y > 495) {
                 upp = true;
                 isJumpingL = false;
             }
@@ -91,7 +90,7 @@ public class Basket {
                 mvDn();
                 mvR();
             }
-            if (this.y == 495) {
+            if (this.y > 495) {
                 upp = true;
                 isJumpingR = false;
             }
@@ -107,7 +106,7 @@ public class Basket {
             } else {
                 mvDn();
             }
-            if (this.y == 495) {
+            if (this.y > 495) {
                 upp = true;
                 isJumping = false;
             }

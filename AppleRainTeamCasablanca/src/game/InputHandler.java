@@ -1,6 +1,8 @@
 package game;
 
 import display.Display;
+import states.GameState;
+import states.StateManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,31 +18,31 @@ public class InputHandler implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if ((keyCode == KeyEvent.VK_UP)) {
-            if (Game.basket.goingLeft) {
-                Game.basket.isJumpingL = true;
-            } else if (Game.basket.goingRight) {
-                Game.basket.isJumpingR = true;
+            if (GameState.basket.goingLeft) {
+                GameState.basket.isJumpingL = true;
+            } else if (GameState.basket.goingRight) {
+                GameState.basket.isJumpingR = true;
             } else
-                Game.basket.isJumping = true;
+                GameState.basket.isJumping = true;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
-            if (Game.basket.goingLeft) {
-                Game.basket.isSlideLeft = true;
-            } else if (Game.basket.goingRight) {
-                Game.basket.isSlideRight = true;
+            if (GameState.basket.goingLeft) {
+                GameState.basket.isSlideLeft = true;
+            } else if (GameState.basket.goingRight) {
+                GameState.basket.isSlideRight = true;
             }
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.basket.goingLeft = true;
+            GameState.basket.goingLeft = true;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.basket.goingRight = true;
+            GameState.basket.goingRight = true;
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
-            System.exit(0);
+            StateManager.setState(Game.menuState);
+           // System.exit(0);
         }
     }
-
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -53,16 +55,16 @@ public class InputHandler implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_UP) {
-            Game.basket.goingUp = false;
+            GameState.basket.goingUp = false;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
-            Game.basket.goingDown = false;
+            GameState.basket.goingDown = false;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.basket.goingLeft = false;
+            GameState.basket.goingLeft = false;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.basket.goingRight = false;
+            GameState.basket.goingRight = false;
         }
     }
 }

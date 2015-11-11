@@ -12,26 +12,25 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Game implements Runnable {
-    public static Basket basket;
+
     public int width, height;
     public String title;
+
     private Display display;
-    private Integer lives;
-    private Integer score;
-    private ArrayList<Apple> appleList;
-    private int inAppCount = 5;
-    private int appCount = inAppCount;
-    private boolean running = false;
+
+
+    static boolean running = false;
     private int sleepTime = 50;
+
     private Thread thread;
     private InputHandler inputHandler;
     private BufferStrategy bs;
     private Graphics g;
-    private BufferedImage img;
+    public static BufferedImage img;
     private SpriteSheet sh;
     //States
     private State gameState;
-    private State menuState;
+    public static State menuState;
 
     //Player
     private State settingsState;
@@ -40,7 +39,6 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
         this.title = title;
-        this.score = 0;
     }
 
     //Initializes all the graphics and it will get
@@ -52,9 +50,9 @@ public class Game implements Runnable {
         img = ImageLoader.loadImage("/textures/Background.jpg");
         sh = new SpriteSheet(ImageLoader.loadImage("/textures/Basket.png"));
 
-        appleList = new ArrayList<>();
-        for (int i = 0; i < inAppCount; i++) {
-            appleList.add(Apple.createRand());
+        GameState.appleList = new ArrayList<>();
+        for (int i = 0; i < GameState.inAppCount; i++) {
+            GameState.appleList.add(Apple.createRand());
         }
 
         this.inputHandler = new InputHandler(this.display);
@@ -68,8 +66,7 @@ public class Game implements Runnable {
         //any more states set up
         StateManager.setState(gameState);
 
-        basket = new Basket();
-        lives = 1;
+        // lives = 1;
     }
 
     //The method that will update all the variables
@@ -78,40 +75,9 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().tick();
         }
-        basket.tick();
-
-        for (int i = 0; i < inAppCount; i++) {
-            if (appleList.get(i).getY() > 600) {
-                lives--;
-                display.shake();
-                appleList.remove(i);
-                appleList.add(i, Apple.createRand());
-            }
-            // Checking catching
-            if (appleList.get(i).Intersects(basket.getBoundingBox())) {
-                score++;
-                appleList.remove(i);
-                appleList.add(i, Apple.createRand());
-            }
-
-            //tick
-            appleList.get(i).tick();
-
-        }
-
-        if (appCount > inAppCount) {
-            appleList.add(Apple.createRand());
-            inAppCount = appCount;
-        }
-
-
-        if (lives < 1) {
-            end();
-        }
-
     }
 
-    private void end() {
+    public static void end() {
         running = false;
     }
 
@@ -134,46 +100,18 @@ public class Game implements Runnable {
         g.clearRect(0, 0, this.width, this.height);
         //Beginning of drawing things on the screen
 
-        g.drawImage(img, 0, 0, this.width, this.height, null);
-        basket.render(g);
-        for (Apple a : appleList) {
-            a.render(g);
-        }
-
-        g.setColor(new Color(180, 180, 180, 150));
-        g.fill3DRect(5, 562, 790, 35, true);
-        g.setColor(Color.GRAY);
-        g.setFont(new Font("Verdana",Font.PLAIN,20));
-        g.drawString("SCORE: " + score.toString(), 12, 590);
-        g.drawString("LIVES: " + lives.toString(), 680, 590);
-
-
         //Checks if a State exists and render()
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.g);
         }
-        if (lives < 1) {
-            g.setFont(new Font("Verdana",Font.BOLD,40));
-            g.setColor(new Color(180, 180, 180, 150));
-            g.fill3DRect(100, 100, 600, 200, true);
-            g.setColor(new Color(171, 44, 44));
-            g.drawString("YOU ARE FIRED!!!", 200, 200);
-            System.out.print("You died");
 
-            Button restart = new Button("qq");
-            restart.setLocation(20, 20);
-            restart.setVisible(true);
-        restart.setEnabled(true);
-            restart.setForeground(Color.PINK);
+    //End of drawing objects
 
-        }
-        //End of drawing objects
-
-        //Enables the buffer
-        bs.show();
-        //Shows everything stored in the Graphics object
-        g.dispose();
-    }
+    //Enables the buffer
+    bs.show();
+    //Shows everything stored in the Graphics object
+    g.dispose();
+}
 
     //Implementing the interface's method
     @Override
